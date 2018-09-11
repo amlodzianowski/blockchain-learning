@@ -1,6 +1,7 @@
 import hashlib
 import json
 import requests
+import sys
 from time import time
 from uuid import uuid4
 from textwrap import dedent
@@ -125,6 +126,7 @@ class Blockchain(object):
 
         # Grab and verify the chains from all the nodes in our network
         for node in neighbours:
+            print('Checking chain on node: {node}'.format(node=node))
             response = requests.get('http://{node}/chain'.format(node=node))
 
             if response.status_code == 200:
@@ -133,6 +135,7 @@ class Blockchain(object):
 
                 # Check if the length is longer and the chain is valid
                 if length > max_length and self.valid_chain(chain):
+                    print('Node: {node} has a longer chain that is valid'.format(node=node))
                     max_length = length
                     new_chain = chain
 
@@ -272,4 +275,4 @@ def consensus():
 
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=9090)
+    app.run(host='0.0.0.0', port=int(sys.argv[1]))
