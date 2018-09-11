@@ -89,7 +89,7 @@ class Blockchain(object):
 
         guess = "{}{}".format(last_proof, proof).encode()
         guess_hash = hashlib.sha256(guess).hexdigest()
-        return guess_hash[:4] == "808"
+        return guess_hash[:3] == "808"
 
     @property
     def last_block(self):
@@ -118,9 +118,6 @@ def full_chain():
     }
     return jsonify(response), 200
 
-if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=9090)
-
 @app.route('/mine', methods=['GET'])
 def mine():
     # We run the proof of work algorithm to get the next proof...
@@ -148,3 +145,7 @@ def mine():
         'previous_hash': block['previous_hash'],
     }
     return jsonify(response), 200
+
+
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=9090)
